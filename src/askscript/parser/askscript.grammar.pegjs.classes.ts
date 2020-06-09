@@ -13,12 +13,11 @@ export class Ask {
   }
 
   print(): LooseObject {
-    let output = {
+    return {
       name: 'ask',
       props: this.askHeader.print(),
       children: this.askBody.print(),
     };
-    return output;
   }
 }
 
@@ -41,43 +40,26 @@ export class AskHeader {
 }
 
 export class AskBody {
-  statementList: Statement[];
-
-  constructor(statementList: Statement[]) {
-    this.statementList = statementList;
-  }
+  constructor(private readonly statementList: Statement[]) {}
 
   print(): LooseObject {
     return this.statementList.map((statement) => statement.print());
   }
 }
 
-export class Statement {
-  statement:
-    | VariableDefinition
-    | If
-    | While
-    | ForOf
-    | ForIn
-    | For3
-    | Return
-    | Assignment
-    | Value;
+type AnyStatement =
+  | VariableDefinition
+  | If
+  | While
+  | ForOf
+  | ForIn
+  | For3
+  | Return
+  | Assignment
+  | Value;
 
-  constructor(
-    statement:
-      | VariableDefinition
-      | If
-      | While
-      | ForOf
-      | ForIn
-      | For3
-      | Return
-      | Assignment
-      | Value
-  ) {
-    this.statement = statement;
-  }
+export class Statement {
+  constructor(private readonly statement: AnyStatement) {}
 
   print(): LooseObject | string | number | boolean | null {
     return this.statement.print();
@@ -106,15 +88,11 @@ export class VariableDefinition {
 }
 
 export class VariableDeclaration {
-  modifier: Const | Let;
-  identifier: Identifier;
-  type: Type;
-
-  constructor(modifier: Const | Let, identifier: Identifier, type: Type) {
-    this.modifier = modifier;
-    this.identifier = identifier;
-    this.type = type;
-  }
+  constructor(
+    private readonly modifier: Const | Let,
+    private readonly identifier: Identifier,
+    private readonly type: Type
+  ) {}
 
   print(): LooseObject {
     let output = {
@@ -836,6 +814,4 @@ export class RemoteHeader {
 export const nullValue = new NonArithmValue(new ValueLiteral(new Null()), []);
 export const anyType = new Identifier('any');
 
-interface LooseObject {
-  [key: string]: any;
-}
+type LooseObject = Record<string, any>;
