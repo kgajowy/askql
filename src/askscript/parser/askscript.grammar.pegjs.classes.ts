@@ -95,25 +95,21 @@ export class VariableDeclaration {
   ) {}
 
   print(): LooseObject {
-    let output = {
+    return {
       name: this.modifier.print(),
       props: {
         name: this.identifier.text,
         type: this.type.print(),
       },
     };
-    return output;
   }
 }
 
 export class Value {
-  nAV: NonArithmValue;
-  operValues: OperNAValue[];
-
-  constructor(nAV: NonArithmValue, operValues: OperNAValue[] = []) {
-    this.nAV = nAV;
-    this.operValues = operValues;
-  }
+  constructor(
+    private readonly nAV: NonArithmValue,
+    private readonly operValues: OperNAValue[] = []
+  ) {}
 
   print(): LooseObject | string | number | boolean | null {
     const nonArithmValue = this.nAV.getShallowCopy();
@@ -124,8 +120,7 @@ export class Value {
       );
     });
 
-    const output = nonArithmValue.print();
-    return output;
+    return nonArithmValue.print();
   }
 }
 
